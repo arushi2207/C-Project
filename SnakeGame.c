@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <windows.h>
-#include <time.h>
+#include <stdio.h> //basic input output function
+#include <conio.h> //kbhit() getch()
+#include <stdlib.h> //rand()
+#include <windows.h> //COORD struct, Sleep()
+#include <time.h> //time_t
 
 int i, j, height = 20, width = 20;
 int gameover, x, y, fruitx, fruity, score;
@@ -21,13 +21,12 @@ void gotoxy(int x, int y)
 
 void Print()
 {
-   //GotoXY(10,12);
-   printf("\n\tWelcome to the Snake game. (press any key to continue)\n");
-   getch();
+   printf("\n\t...WELCOME TO THE SNAKE GAME...\n");
+   Sleep(2000);
    system("cls");
    printf("\n\tGAME INSTRUCTIONS :\n");
-   printf("\n-> Use WASD keys to move the snake.\n\tW -> UP\n\tA -> LEFT\n\tD -> RIGHT\n\tS -> DOWN\n\n-> You will be provided with a fruit at several coordinates of the screen which you have to eat.\n Everytime you eat a food the length of the snake will be increased and the score by 10.\n\n-> The game ends as you hit the snake's body.\n\n-> You can pause the game in its middle by pressing any key. To continue the paused game press any other key once again\n\n-> If you want to exit press esc. \n");
-   printf("\n\nPress any key to play the game...");
+   printf("\n-> Use WASD keys to move the snake.\n\tW -> UP\n\tA -> LEFT\n\tD -> RIGHT\n\tS -> DOWN\n\n-> You will be provided with a fruit at several coordinates of the screen which you have to eat.\n Everytime you eat a food the length of the snake will be increased and the score by 10 points.\n\n->You can not move in the opposite direction.\n\n-> You can teleport from one side of the wall to another.\n\n-> The game ends as you collide with the snake's body.\n\n-> If you want to exit press esc. \n");
+   printf("\n\nPress any key to start...");
    if(getch()==27)
    exit(0);
 }
@@ -59,27 +58,26 @@ void setup()
     score = 0;
 }
 
-
 void draw()
 {
     system("cls");
     for (i = 0; i < width + 2; i++)
-        printf("-");
+        printf("-"); // upper wall
     printf("\n");
 
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
             if (j == 0)
-                printf("|");
+                printf("|");  // right side wall
             if (i == y && j == x)
-                printf("O");
+                printf("O");  //snake's head position
             else if (i == fruity && j == fruitx)
-                printf("F");
+                printf("F");  //fruit position
             else {
                 int isprint = 0;
                 for (int k = 0; k < nTail; k++) {
                     if (tailX[k] == j && tailY[k] == i) {
-                        printf("o");
+                        printf("o");  // to print snake's tail
                         isprint = 1;
                     }
                 }
@@ -88,13 +86,13 @@ void draw()
             }
 
             if (j == width - 1)
-                printf("|");
+                printf("|");  //left side wall
         }
         printf("\n");
     }
 
     for (i = 0; i < width + 2; i++)
-        printf("-");
+        printf("-");  // lower wall
     printf("\n");
     printf("Score:%d", score);
 }
@@ -176,14 +174,12 @@ void record(){
     Sleep(2000);
     system("cls");
     gotoxy(30,15);
-    printf("!!!GAMEOVER!!!\n\n\t\t\tyour score = %d",score);
+    printf("!!!GAMEOVER!!!\n\n\t\t    your score = %d",score);
     Sleep(3000);
     system("cls");
     char plname[20],cha,c;
     FILE *info;
-    info=fopen("record2.txt","a+");
-    // getch();
-    // system("cls");
+    info=fopen("record.txt","a+");
     printf("Enter your name\n");
     scanf("%[^\n]",plname);
 
@@ -195,20 +191,24 @@ void record(){
     for(i=0;i<=50;i++)
     fprintf(info,"%c",'_');
     fprintf(info,"\n");
+    fclose(info);
     system("cls");
 
-    printf("press 'y' to see scoreboard...\n");
+    printf("press 'y' to see scoreboard and 'n' to exit...\n");
     cha=getch();
     system("cls");
-    if(cha=='y'){
-    info=fopen("record2.txt","r");
+    if(cha=='n'){
+        system("cls");
+    }
+    else if(cha=='y'){
+    info=fopen("record.txt","r");
     do{
        putchar(c=getc(info));
        }
     while(c!=EOF);}
-    //    Sleep(2000);
        system("pause");
     fclose(info);
+    
 }
 
 int main()
